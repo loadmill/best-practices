@@ -1,0 +1,62 @@
+meta:
+  description: Websocket
+requests:
+  
+  - description: Dummy request - Send & extract
+    method: GET
+    url: wss://s11091.lon1.piesocket.com/v3/1?api_key=rGnpQIOQYEmO1fa9n3cJdS18If08mVolJ3dC1cvY&notify_self=1
+    disabled: false
+    postData:
+      text: foo hello there bar
+      mimeType: text
+    extract:
+      - sent_string:
+          ws: foo (.*) bar
+    id: f1caaf68-c98d-4fba-8030-59316461c90c
+
+  - description: Dummy request - Send 'A'
+    method: GET
+    url: wss://s11091.lon1.piesocket.com/v3/1?api_key=rGnpQIOQYEmO1fa9n3cJdS18If08mVolJ3dC1cvY&notify_self=1
+    disabled: false
+    postData:
+      text: "Value A: Apple"
+      mimeType: text
+    extract: []
+    id: 3dcb156a-0242-41de-90f6-92a430d10aa9
+
+  - description: Dummy request - Send 'B'
+    method: GET
+    url: wss://s11091.lon1.piesocket.com/v3/1?api_key=rGnpQIOQYEmO1fa9n3cJdS18If08mVolJ3dC1cvY&notify_self=1
+    disabled: false
+    postData:
+      text: "Now we'll put B for: Banana."
+      mimeType: text
+    extract: []
+    id: 73e5bd4b-43b1-436f-a9a9-5d8b2ea45aad
+
+  - description: Dummy request - Send 'C'
+    method: GET
+    url: wss://s11091.lon1.piesocket.com/v3/1?api_key=rGnpQIOQYEmO1fa9n3cJdS18If08mVolJ3dC1cvY&notify_self=1
+    disabled: false
+    postData:
+      text: "C will represent the sentence: Creating a websocket flow."
+      mimeType: text
+    extract: []
+    id: 30bce13f-3ad7-41a3-88d5-d0ebfb9903de
+
+  - description: Dummy request - Send 'D' & extract 'B' using pattern
+    method: GET
+    url: wss://s11091.lon1.piesocket.com/v3/1?api_key=rGnpQIOQYEmO1fa9n3cJdS18If08mVolJ3dC1cvY&notify_self=1
+    disabled: false
+    postData:
+      text: "D: Door"
+      mimeType: text
+    timeout: 25000
+    extract:
+      - B_stands_for:
+          ws: ".*B.*: ([a-zA-Z0-9 ]*).*"
+    postScript: ""
+    id: 76d6b63c-a913-494f-9035-45ad30b99aea
+
+parameters: []
+scopeParameters: []

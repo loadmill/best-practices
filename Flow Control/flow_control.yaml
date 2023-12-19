@@ -1,0 +1,146 @@
+meta:
+  description: Flow Control
+requests:
+  
+  - description: Loop until condition is true
+    method: POST
+    url: ${http_echo_server}
+    postData:
+      text: ${number_for_fc_example}
+      mimeType: text/plain
+    extract:
+      - number_for_fc_example: ${number_for_fc_example + '1'}
+    loop:
+      assert:
+        check: number_for_fc_example
+        equals: "3"
+      iterations: 10
+      wait: 1000
+    id: 3ec5fe58-c661-4f77-a3ff-782deec12d70
+
+  - description: Skip condition by a boolean parameter
+    method: POST
+    url: ${http_echo_server}
+    postData:
+      text: ${number_for_fc_example}
+      mimeType: text/plain
+    extract:
+      - is_number_greater_than_1: ${__gt(number_for_fc_example,'1')}
+    id: b26379cf-3465-4a8a-aa88-e12c326d90a6
+
+  - description: ⏩ skipped if parameter was true
+    method: GET
+    url: ${httpbin}
+    extract: []
+    skipBefore:
+      condition: is_number_greater_than_1
+      negate: false
+    id: 0bd48394-58fd-45dd-ae41-6f9733a8db99
+
+  - description: Skip condition by a boolean parameter (with loop)
+    method: POST
+    url: ${http_echo_server}
+    postData:
+      text: ${number_for_fc_example}
+      mimeType: text/plain
+    extract:
+      - number_for_fc_example: ${number_for_fc_example + '1'}
+      - is_number_greater_than_4: ${__gt(number_for_fc_example,'4')}
+    loop:
+      assert:
+        check: number_for_fc_example
+        greater: "5"
+      iterations: 30
+      wait: 1000
+    id: af6f3d80-d042-4e78-a711-c5f9ee571916
+
+  - description: ⏩ skipped if parameter was true
+    method: GET
+    url: ${httpbin}
+    extract: []
+    skipBefore:
+      condition: is_number_greater_than_4
+      negate: false
+    id: 2a3b4bfd-1be9-4c96-9592-23c099bbf7fe
+
+  - description: Skip TO request X if parameter is true
+    method: GET
+    url: ${httpbin}
+    extract:
+      - always_true: ${__true()}
+    loop:
+      assert:
+        check: current_timestamp
+        notContains: " "
+      iterations: 20
+      wait: "500"
+    id: 07d0fe96-4b2d-44b7-a822-3c8ae36290a4
+
+  - description: ⏩ skipped if parameter was true
+    method: GET
+    url: ${httpbin}
+    extract: []
+    skipBefore:
+      goTo: Request X
+      condition: always_true
+      negate: false
+    id: 090bb4a0-01e3-4c28-bcf2-664a3518006c
+
+  - description: ⏩ skipped if parameter was true
+    method: GET
+    url: ${httpbin}
+    extract: []
+    id: a7af5148-2fb9-4ed5-9fed-244ca335e919
+
+  - description: ⏩ skipped if parameter was true
+    method: GET
+    url: ${httpbin}
+    extract: []
+    id: 55a22fde-1e34-4ead-990f-0a0f4fc79d1a
+
+  - description: Request X
+    method: GET
+    url: ${httpbin}
+    id: 1b9af17f-36ff-4d4b-8649-58bfe49b1f8d
+
+  - description: Stop condition (including loop)
+    method: POST
+    url: ${http_echo_server}
+    postData:
+      text: ${number_for_fc_example}
+      mimeType: text/plain
+    extract:
+      - number_for_fc_example: ${number_for_fc_example + '1'}
+      - is_number_equals_8: ${__gt(number_for_fc_example,'8')}
+    loop:
+      assert:
+        check: number_for_fc_example
+        equals: "10"
+      iterations: 30
+      wait: 1000
+    id: b4f6efdf-62e5-43b2-a7f4-d063d463da3a
+
+  - description: 🚫 won't reach this if stop condition was true
+    method: GET
+    url: ${httpbin}
+    stopBefore: ""
+    delay: ""
+    id: 6d41c7a4-99cc-453b-ab5b-5b69470ff513
+
+  - description: 🚫 won't reach this if stop condition was true
+    method: GET
+    url: ${httpbin}
+    stopBefore: always_false
+    id: 802ec476-0c0a-4dbc-acd9-156c94df38fa
+
+  - description: 🚫 won't reach this if stop condition was true
+    method: GET
+    url: ${httpbin}
+    stopBefore: always_false
+    id: 603b2220-fdf1-4afd-8911-432d1c5c8344
+
+parameters:
+  - httpbin: https://bin.blockchain-socks.xyz
+  - http_echo_server: https://echo.free.beeceptor.com
+  - number_for_fc_example: "0"
+scopeParameters: []

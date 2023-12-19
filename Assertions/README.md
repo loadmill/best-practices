@@ -1,0 +1,3 @@
+# Assertions - notes
+- In Loadmill test flows, the existence of a parameter is not determined by whether it was defined or not, but by it's value. A parameters counts as "doesn't exist" when it's value is an empty string or a boolean 'false' value. 
+> For example if `param` is assigned to be `__is_number('A')`, the parameter `param` will "not exist" since it's value is `false`. So when an assertion for the existence of `param` will be made, an error will be raised and the flow will fail.

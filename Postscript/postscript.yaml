@@ -1,0 +1,155 @@
+meta:
+  description: Postscript
+requests:
+  
+  - description: JSON - Adding a key whose value is another JSON
+    method: POST
+    url: ${http_echo_server}
+    postData:
+      text: |-
+        {
+          "name": "John Doe"
+        }
+      mimeType: application/json
+    postScript: |-
+      let new_json = $.parsedBody
+
+      new_json["full name"] = {
+        "first name": "John",
+        "middle name": "Johnny",
+        "last name": "Doe",
+        "suffix": "Jr"
+      }  
+
+      console.log(JSON.stringify(new_json))
+    id: 5d7f41d9-456a-43c7-9a1c-84ea06a18aec
+
+  - description: Dates - Changing date format
+    method: POST
+    url: ${http_echo_server}
+    postData:
+      text: ${date_for_example}
+      mimeType: text/plain
+    postScript: >
+      const date_object = new Date($.rawBody);
+
+      const custom_date_format = Intl.DateTimeFormat('en-US', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+      const formattedDate = custom_date_format.format(date_object);
+
+
+      console.log(formattedDate)
+    id: 28ad6d82-6462-410e-92aa-ed0dad73a463
+
+  - description: Using previous postscript's variables
+    method: POST
+    url: ${httpbin}/anything
+    postData:
+      text: The formatted date from previous request ${formattedDate}
+      mimeType: text/plain
+    extract:
+      - date_with_dots: ${__replace_all(formattedDate,'/','.')}
+    postScript: console.log(formattedDate)
+    id: 2bded0af-6dcf-46fd-af25-2eea6e0f8f3c
+
+  - description: Using an extracted parameter inside a postscript
+    method: GET
+    url: ${httpbin}
+    postScript: |-
+      const date_with_dashes = date_with_dots.replaceAll(".", "-")
+      console.log(date_with_dashes)
+    id: b465e81b-49bd-45fc-8d58-16d415b9c1b8
+
+  - description: Loadmill-functions usage in postscript
+    method: GET
+    url: ${httpbin}
+    postScript: |
+      const current_timestamp = __.now()
+      const test_start_timestamp = __testStartTime
+
+      const current_date = new Date(parseInt(current_timestamp))
+      const test_start_date = new Date(parseInt(test_start_timestamp))
+
+      const running_time = current_date.getTime() - test_start_date.getTime();
+      const running_time_in_seconds = running_time / 1000
+
+      console.log(`The was executed ${running_time_in_seconds} seconds ago.`)
+    id: 9e8f243c-5d14-43f2-a60a-f97b2da4906a
+
+  - description: Assertions in postscript
+    method: POST
+    url: ${http_echo_server}
+    postData:
+      text: |-
+        {
+          "key1": "val1",
+          "key2": "val2",
+          "key3": "val3"
+        }
+      mimeType: application/json
+    postScript: |-
+      const json_from_response = $.parsedBody
+
+      for (var key in json_from_response) {
+        key_num = key.match("key([0-9])")[1]
+        val_num = json_from_response[key].match("val([0-9])")[1]
+
+        // Asserting that the value number matches the key number
+        console.log(key_num, val_num)
+        assert(key_num === val_num)
+      }
+    id: 7c4520eb-e8ed-45c5-bc07-6e59b5d927b4
+
+  - description: Assertions with description in postscript
+    method: POST
+    url: ${http_echo_server}
+    postData:
+      text: |-
+        {
+          "key1": "val1",
+          "key2": "val2",
+          "key3": "val3"
+        }
+      mimeType: application/json
+    postScript: >-
+      const json_from_response = $.parsedBody
+
+
+      for (var key in json_from_response) {
+        key_num = key.match("key([0-9])")[1]
+        val_num = json_from_response[key].match("val([0-9])")[1]
+
+        // Asserting that the value number matches the key number
+        assert(key_num === val_num, `The key "${key_num}", does not match the value "${val_num}"`)
+      }
+    id: f733fc1a-8c84-4b20-9ba2-757a59ad531c
+
+  - description: Assertions with failure
+    method: POST
+    url: ${http_echo_server}
+    postData:
+      text: |-
+        {
+          "key1": "val1",
+          "key2": "val2",
+          "key3": "val7"
+        }
+      mimeType: application/json
+    postScript: >-
+      const json_from_response = $.parsedBody
+
+
+      for (var key in json_from_response) {
+        key_num = key.match("key([0-9])")[1]
+        val_num = json_from_response[key].match("val([0-9])")[1]
+
+        // Asserting that the value number matches the key number
+        assert(key_num === val_num, `The key "${key}", does not match the value "${json_from_response[key]}"`)
+      }
+    id: 53f78055-a7f7-4a69-a273-67acbec5c434
+
+parameters:
+  - httpbin: https://bin.blockchain-socks.xyz
+  - http_echo_server: https://echo.free.beeceptor.com
+  - date_for_example: ${__now_iso()}
+scopeParameters: []

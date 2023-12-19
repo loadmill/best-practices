@@ -1,0 +1,214 @@
+meta:
+  description: Assertions
+requests:
+  
+  - description: Asserting parameter EXISTS
+    method: GET
+    url: ${http_echo_server}
+    postData:
+      text: |-
+        {
+          "key": "val"
+        }
+      mimeType: application/json
+    extract:
+      - value_of_real_key:
+          jsonPath: $["parsedBody"].key
+    assert:
+      - check: value_of_real_key
+    id: 06788b44-30ce-4810-919e-36c5731225ca
+
+  - description: Asserting parameter DOESN'T EXIST
+    method: GET
+    url: ${http_echo_server}
+    postData:
+      text: |-
+        {
+          "key": "val"
+        }
+      mimeType: application/json
+    extract:
+      - value_of_missing_key:
+          jsonPath: $.MissingKey
+    assert:
+      - check: value_of_missing_key
+        falsy: true
+    id: b36e38c7-1f37-4e39-8009-6aa3d0790ecc
+
+  - description: Asserting parameter EQUALS value
+    method: GET
+    url: ${http_echo_server}
+    postData:
+      text: |-
+        {
+          "phrase": "Hello world!"
+        }
+      mimeType: application/json
+    extract:
+      - extracted_value:
+          jsonPath: $["parsedBody"].phrase
+    assert:
+      - check: extracted_value
+        equals: Hello world!
+    id: 980a5ce4-e2be-45f8-ab65-2595217f3863
+
+  - description: Asserting parameter DOESN'T EQUAL value
+    method: GET
+    url: ${http_echo_server}
+    postData:
+      text: |-
+        {
+          "phrase": "Hello world!"
+        }
+      mimeType: application/json
+    extract:
+      - extracted_value:
+          jsonPath: $["parsedBody"].phrase
+    assert:
+      - check: extracted_value
+        notEquals: Hello Jhon!
+    id: e1a9c0c0-2d2e-463a-8f86-8b7341690b38
+
+  - description: Asserting parameter CONTAINS value
+    method: GET
+    url: ${http_echo_server}
+    postData:
+      text: |-
+        {
+          "phrase": "Hello world!"
+        }
+      mimeType: application/json
+    extract:
+      - extracted_value:
+          jsonPath: $["parsedBody"].phrase
+    assert:
+      - check: extracted_value
+        contains: Hello
+    id: 20b098a8-aa9d-4d28-9653-1b50a98b35cc
+
+  - description: Asserting parameter DOESN'T CONTAIN value
+    method: GET
+    url: ${http_echo_server}
+    postData:
+      text: |-
+        {
+          "phrase": "Hello world!"
+        }
+      mimeType: application/json
+    extract:
+      - extracted_value:
+          jsonPath: $["parsedBody"].phrase
+    assert:
+      - check: extracted_value
+        notContains: Jhon
+    id: efbea1fc-58b6-43f2-9e04-c2e1bb8036d4
+
+  - description: Asserting parameter MATCHES regex
+    method: GET
+    url: ${http_echo_server}
+    postData:
+      text: >-
+        {
+          "phrase": "The sentence should be grammatically correct and start with a capital letter!"
+        }
+      mimeType: application/json
+    extract:
+      - extracted_value:
+          jsonPath: $["parsedBody"].phrase
+    assert:
+      - check: extracted_value
+        matches: "[A-Z][a-zA-Z,() ]*[!.?;]"
+    id: 028a8756-72ef-417a-8303-5aaafca7dfd3
+
+  - description: Asserting parameter is GREATER THAN num
+    method: GET
+    url: ${http_echo_server}
+    postData:
+      text: |-
+        {
+          "number": "1"
+        }
+      mimeType: application/json
+    extract:
+      - extracted_number:
+          jsonPath: $["parsedBody"].number
+    assert:
+      - check: extracted_number
+        greater: "0"
+    id: 7f585039-daaa-4838-8ee0-94f1c3f560bc
+
+  - description: Asserting parameter is LESS THAN num
+    method: GET
+    url: ${http_echo_server}
+    postData:
+      text: |-
+        {
+          "number": "1"
+        }
+      mimeType: application/json
+    extract:
+      - extracted_number:
+          jsonPath: $["parsedBody"].number
+    assert:
+      - check: extracted_number
+        lesser: ${arbitrary_number}
+    id: e668c555-7328-44e2-aaea-5235b172adff
+
+  - description: Asserting parameter fits JSON SCHEMA
+    method: GET
+    url: ${http_echo_server}
+    postData:
+      text: |-
+        {
+          "key": "val"
+        }
+      mimeType: application/json
+    extract:
+      - extracted_json:
+          jsonPath: parsedBody
+    assert:
+      - check: extracted_json
+        JSONSchema: |-
+          {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "properties": {
+              "key": {
+                "type": "string",
+                "const": "val"
+              }
+            },
+            "required": ["key"],
+            "additionalProperties": false
+          }
+    delay: ""
+    id: f919b77b-4827-4b28-ae5f-863b4bbe20c0
+
+  - description: Asserting parameter JSON CONTAINS json
+    method: GET
+    url: ${http_echo_server}
+    postData:
+      text: |-
+        {
+          "key1": {
+            "key1.1": "val1.1"
+          },
+          "key2": "val2"
+        }
+      mimeType: application/json
+    extract:
+      - extracted_json:
+          jsonPath: parsedBody
+    assert:
+      - check: extracted_json
+        JSONContains: |-
+          {
+            "key2": "val2"
+          }
+    delay: ""
+    id: f8b93fb2-6e21-425b-b47d-939d952d7f28
+
+parameters:
+  - http_echo_server: https://echo.free.beeceptor.com
+  - arbitrary_number: "10"
+scopeParameters: []

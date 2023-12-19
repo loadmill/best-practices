@@ -1,0 +1,94 @@
+meta:
+  description: Parameters extractions
+requests:
+  
+  - description: Dummy request - Parameters assigning
+    method: GET
+    url: ${httpbin}
+    extract:
+      - company: Loadmill
+      - one_plus_one: ${'1' + '1'}
+      - two_mul_two: ${'2' * '2'}
+      - one_plus_one_func: ${__add('1','1')}
+      - two_mul_two_func: ${__mult('2','2')}
+      - ok_status_code: ${one_plus_one * '100'}
+      - div_with_params: ${one_plus_one / one_plus_one_func}
+      - minus_func_with_params: ${__sub(two_mul_two,two_mul_two_func)}
+    assert:
+      - check: one_plus_one
+        equals: ${one_plus_one_func}
+      - check: two_mul_two
+        equals: ${two_mul_two_func}
+    id: cf1d025e-1323-4f50-bcf5-e9e97598df4d
+
+  - description: Dummy request - Parameters usage
+    method: POST
+    url: ${httpbin}/status/${ok_status_code}
+    postData:
+      text: "One plus one is ${one_plus_one}, BUT! Two multiplied by two is
+        ${two_mul_two}. The function __mul() should return the same answer:
+        ${two_mul_two_func}"
+      mimeType: text/plain
+    headers:
+      - Company-Name: ${company}
+    extract:
+      - is_one_plus_one_two: ${__eq(one_plus_one,'2')}
+    assert:
+      - check: one_plus_one
+        lesser: ${two_mul_two_func}
+      - check: two_mul_two
+        greater: ${one_plus_one_func}
+      - check: is_one_plus_one_two
+        equals: ${__true()}
+    id: 8aff336e-4752-4ed6-ab33-fedbd4daee6e
+
+  - description: Dummy request - JSONPath extraction
+    method: POST
+    url: ${httpbin}/anything
+    postData:
+      text: Hello I'm extracted using JSONPath
+      mimeType: text/plain
+    extract:
+      - jsonpath_param:
+          jsonPath: $["data"]
+    id: 4b2cbb36-45a2-4617-bd80-a11ad9b77210
+
+  - description: Dummy request - jQuery extraction
+    method: GET
+    url: ${httpbin}/html
+    disabled: false
+    extract:
+      - title_of_html:
+          jQuery:
+            query: h1
+            attr: ""
+    id: abeeb92f-50f4-486e-a6d1-27d1f9cd5282
+
+  - description: Dummy request - xPath extraction
+    method: GET
+    url: ${httpbin}/xml
+    extract:
+      - xpath_param:
+          xPath: (/slideshow/slide/title)[1]/text()
+    id: c80f2fd3-2b2c-4279-aa22-0912467e66ee
+
+  - description: Dummy request - RegExp extraction
+    method: GET
+    url: ${httpbin}/base64/${base_64_example_sentence}
+    extract:
+      - regexp_param:
+          regex: \"(.*)\"
+    id: 3c27e33d-955f-4abd-9a50-df89401bac77
+
+  - description: Dummy request - Header extraction
+    method: GET
+    url: ${httpbin}/response-headers?custom-header=My%20extracted%20header
+    extract:
+      - header_param:
+          header: custom-header
+    id: f9e83dda-32c9-4dc3-b7ff-43f94e93ad01
+
+parameters:
+  - httpbin: https://bin.blockchain-socks.xyz
+  - base_64_example_sentence: RXh0cmFjdGluZyB0aGUgc2VudGVuY2UgYmV0d2VlbiB0aGUgcXVvdGVzICJUaGUgc2VudGVuY2UgYmV0d2VlbiB0aGUgcXVvdGVzLi4uIiBhbGwgdGhlIG90aGVyIHdvcmRzIHdvbid0IGJlIGV4dHJhY3RlZC4%3D
+scopeParameters: []
