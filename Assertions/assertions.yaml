@@ -208,6 +208,32 @@ requests:
     delay: ""
     id: f8b93fb2-6e21-425b-b47d-939d952d7f28
 
+  - description: Asserting parameter XML CONTAINS json
+    method: GET
+    url: ${http_echo_server}
+    postData:
+      text: |-
+        <?xml version="1.0" encoding="UTF-8" ?>
+        <root>
+        	<key1>
+              <key1.1>val1.1</key1.1>
+            </key1>
+            <key2>val2</key2>
+        </root>
+      mimeType: application/xml
+    extract:
+      - extracted_raw_xml:
+          jsonPath: rawBody
+    assert:
+      - check: extracted_raw_xml
+        XMLContains: |-
+          <?xml version="1.0" encoding="UTF-8" ?>
+          <root>
+              <key2>val2</key2>
+          </root>
+    delay: ""
+    id: 51b0bfe4-4129-45c1-b949-950d36280559
+
 parameters:
   - http_echo_server: https://echo.free.beeceptor.com
   - arbitrary_number: "10"
