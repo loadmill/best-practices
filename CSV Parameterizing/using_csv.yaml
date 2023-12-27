@@ -1,0 +1,23 @@
+meta:
+  description: Using CSV
+requests:
+  
+  - description: Using parameters from a CSV file
+    method: POST
+    url: ${httpbin}/anything
+    postData:
+      text: |-
+        {
+          "email_from_csv": "${email}",
+          "user_id_from_csv": ${user_id}
+        }
+      mimeType: application/json
+    extract:
+      - is_user_subscribed: ${is_subscribed}
+    id: 8fa6c5c1-69c8-4099-8230-4ed428123716
+
+parameters:
+  - httpbin: https://bin.blockchain-socks.xyz
+parameterPools:
+  - 24c4cbb9-52d3-42ee-8129-c7eea45f9a14
+scopeParameters: []
