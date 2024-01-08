@@ -1,0 +1,38 @@
+meta:
+  description: Iterate over array
+requests:
+  
+  - description: Fetching the countries array + initializing parameters
+    method: POST
+    url: ${httpbin}/anything
+    postData:
+      text: ${list_of_states}
+      mimeType: text/plain
+    extract:
+      - list_of_states:
+          jsonPath: $["data"]
+      - index: "0"
+      - jsonpath_for_array: $[${index}]
+      - state: ${__jsonpath(list_of_states,jsonpath_for_array)}
+    id: 3e030ae5-0db1-499f-81da-60e9df3d88cf
+
+  - description: Requesting in a loop for every array item
+    method: GET
+    url: ${httpbin}/anything/${state}
+    extract:
+      - datasources_tried: ${datasources_tried}->${state}
+      - index: ${index + '1'}
+      - jsonpath_for_list: $[${index}]
+      - state: ${__jsonpath(list_of_states,jsonpath_for_list)}
+    loop:
+      assert:
+        check: index
+        equals: ${__array_length(list_of_states)}
+      iterations: 100
+      wait: ""
+    id: 0f2a89c0-2bfc-4497-bb42-cc3c2a3ad83f
+
+parameters:
+  - httpbin: https://bin.blockchain-socks.xyz
+  - list_of_states: '["isreal", "france", "germany", "russia", "spain", "united-states"]'
+scopeParameters: []

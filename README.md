@@ -12,6 +12,7 @@ Welcome to the Best Practices repository for Loadmill! This guide provides a com
 5. [Postscript](./Postscript/README.md)
 6. [Websocket](./Websocket/README.md)
 7. [Assertions](./Assertions/README.md)
+8. [Loops](./Loops/README.md)
 
 ## Introduction
 
