@@ -3,17 +3,6 @@
 
 Welcome to the Best Practices repository for Loadmill! This guide provides a comprehensive overview of recommended practices and usage guidelines for various functionalities within our tool.
 
-## Table of Contents
-
-1. [Introduction](#introduction)
-2. [Getting Started](#getting-started)
-3. [Extractions](./Extractions/README.md)
-4. [Flow Control](<./Flow Control/README.md>)
-5. [Postscript](./Postscript/README.md)
-6. [Websocket](./Websocket/README.md)
-7. [Assertions](./Assertions/README.md)
-8. [Loops](./Loops/README.md)
-
 ## Introduction
 
 Loadmill automates testing across multiple devices and platforms by replaying and analyzing real user behavior, helping engineers to easily create the tests required for continuous delivery. Loadmill creates and replays thousands of tests based on user flows within minutes.

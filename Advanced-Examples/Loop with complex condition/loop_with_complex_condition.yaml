@@ -1,0 +1,25 @@
+meta:
+  description: Loop complex condition
+requests:
+  
+  - description: Requesting in a loop until both conditions are true
+    method: GET
+    url: ${httpbin}/anything
+    extract:
+      - condition_for_x: ${__gt(parameter_x,'3')}
+      - condition_for_y: ${__gt(parameter_y,'6')}
+      - complex_condition: ${__and(condition_for_x,condition_for_y)}
+      - parameter_x: ${parameter_x + '1'}
+      - parameter_y: ${parameter_y + '1'}
+    loop:
+      assert:
+        check: complex_condition
+      iterations: 100
+      wait: 1000
+    id: 832ff94b-f219-45cf-bfa8-0a9d78a245ae
+
+parameters:
+  - httpbin: https://bin.blockchain-socks.xyz
+  - parameter_x: "0"
+  - parameter_y: "0"
+scopeParameters: []
