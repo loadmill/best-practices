@@ -1,0 +1,26 @@
+meta:
+  description: Array Functions
+requests:
+  
+  - description: Finding next missing element
+    method: GET
+    url: ${httpbin}
+    postData:
+      text: ""
+      mimeType: text/plain
+    extract:
+      - full_array: "[0,1,2,3,4,5,6,7,8,9,10]"
+      - sub_array: "[0,1,2,4,5,6,7]"
+      - missing_element: ${__array_missing_element(sub_array,full_array)}
+    id: f3848161-3e0c-408f-9560-4915888b5235
+
+  - description: Creating a sequence array
+    method: GET
+    url: ${httpbin}
+    extract:
+      - sequence_array: ${__sequence_array('10')}
+    id: b46380f4-c654-4f9a-ab06-5cc9b10089bd
+
+parameters:
+  - httpbin: https://bin.blockchain-socks.xyz
+scopeParameters: []

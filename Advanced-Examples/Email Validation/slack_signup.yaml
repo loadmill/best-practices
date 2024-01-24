@@ -1,0 +1,138 @@
+meta:
+  description: slack login prettified
+requests:
+  
+  - description: Check if the email is available for signup
+    method: POST
+    url: ${base_url}/api/signup.checkEmail?_x_id=noversion-1704744389.009
+    id: 3d5a6644-4ab0-4643-a7b5-3b77e30f6526
+    postFormData:
+      - name: email
+        value: ${email_for_test}
+      - name: get_info
+        value: undefined
+    headers:
+      - accept: "*/*"
+      - accept-encoding: gzip, deflate, br
+      - accept-language: en-US,en;q=0.9
+      - referer: https://slack.com/get-started
+
+  - description: Confirm the email address for signup
+    method: POST
+    url: ${base_url}/api/signup.confirmEmail?_x_id=noversion-1704744389.502
+    id: d510143e-f0c3-4ce0-83d5-93b4c617ba29
+    postFormData:
+      - name: email
+        value: ${email_for_test}
+      - name: locale
+        value: en-US
+    headers:
+      - accept: "*/*"
+      - accept-encoding: gzip, deflate, br
+      - accept-language: en-US,en;q=0.9
+      - referer: https://slack.com/get-started
+
+  - description: Track user activity for analytics purposes
+    method: POST
+    url: ${base_url}/clog/track/
+    id: ea720d22-3a3f-46ef-b30f-ab52e60540d6
+    postFormData:
+      - name: logs
+        value: '[{"tstamp":1704744389007,"event":300323,"args":{"contexts":{"ui_context":{"ui_step":"create_new_workspace","step_variant":"get_started_creator_signup","ui_properties":{"element_type":2,"element_name":"continue"},"action":36}}},"team_id":"T00000000","is_ia4":false,"session_id":"a17bc507-c48b-458f-a826-93b4bf6f373c","i18n_locale":"en-US","sub_app_name":"legacy"},{"tstamp":1704744389770,"event":300323,"args":{"contexts":{"referring_ui_context":{"ui_step":"create_new_workspace","step_variant":"get_started_creator_signup","ui_properties":{"element_type":2,"element_name":"continue"},"action":36},"ui_context":{"ui_step":"get_started_confirm_code","step_variant":"email_first","action":1}},"referring_event_id":300323},"team_id":"T00000000","is_ia4":false,"session_id":"a17bc507-c48b-458f-a826-93b4bf6f373c","i18n_locale":"en-US","sub_app_name":"legacy"},{"tstamp":1704744389772,"event":800012,"args":{"contexts":{"referring_ui_context":{"ui_step":"create_new_workspace","step_variant":"get_started_creator_signup","ui_properties":{"element_type":2,"element_name":"continue"},"action":36},"ui_context":{"entry_point":"newxp_team_create-create_new_workspace.get_started_creator_signup","ui_step":"get_started_confirm_code","step_variant":"email_first","action":1,"ui_page":"https://slack.com/get-started#/confirmemail","ui_properties":{"element_name":"get_started_confirmation_code"}}},"referring_event_id":300323},"team_id":"T00000000","is_ia4":false,"session_id":"a17bc507-c48b-458f-a826-93b4bf6f373c","i18n_locale":"en-US","sub_app_name":"legacy"},{"tstamp":1704744389773,"event":300323,"args":{"contexts":{"ui_context":{"ui_step":"create_new_workspace","step_variant":"get_started_creator_signup","action":41}}},"team_id":"T00000000","is_ia4":false,"session_id":"a17bc507-c48b-458f-a826-93b4bf6f373c","i18n_locale":"en-US","sub_app_name":"legacy"}]'
+      - name: o
+        value: client
+    headers:
+      - accept: "*/*"
+      - accept-encoding: gzip, deflate, br
+      - accept-language: en-US,en;q=0.9
+      - referer: https://slack.com/get-started
+
+  - description: Retrieve the email details using the provided uuid
+    method: GET
+    url: ${loadmill_email_confirmation_service_url}/open-api/emails/${seed}
+    headers:
+      - accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+      - accept-encoding: gzip, deflate, br
+      - accept-language: en-US,en;q=0.9
+    extract:
+      - confirmation_code:
+          regex: "Slack confirmation code: (.{3}-.{3})"
+    id: 64031f01-d387-4c26-93f3-066f500eedf3
+
+  - description: Confirm the verification code for signing in
+    method: POST
+    url: ${base_url}/api/signin.confirmCode?_x_id=noversion-1704744417.085
+    assert:
+      - check: __responseBody
+        JSONContains: '{"ok":true}'
+    id: 465590d7-2313-47fe-9391-b8d7462e055d
+    postFormData:
+      - name: email
+        value: ${email_for_test}
+      - name: code
+        value: ${__replace(confirmation_code,'-','')}
+    headers:
+      - accept: "*/*"
+      - accept-encoding: gzip, deflate, br
+      - accept-language: en-US,en;q=0.9
+      - referer: https://slack.com/get-started
+
+  - description: POST api/signup.createTeam
+    method: POST
+    url: https://slack.com/api/signup.createTeam?_x_id=noversion-1704915017.918
+    postData:
+      text: "------WebKitFormBoundaryHodrknGBwV6OnjdZ\r
+
+        Content-Disposition: form-data; name=\"email_misc\"\r
+
+        \r
+
+        false\r
+
+        ------WebKitFormBoundaryHodrknGBwV6OnjdZ\r
+
+        Content-Disposition: form-data; name=\"tz\"\r
+
+        \r
+
+        Asia/Jerusalem\r
+
+        ------WebKitFormBoundaryHodrknGBwV6OnjdZ\r
+
+        Content-Disposition: form-data; name=\"locale\"\r
+
+        \r
+
+        en-US\r
+
+        ------WebKitFormBoundaryHodrknGBwV6OnjdZ\r
+
+        Content-Disposition: form-data; name=\"last_tos_acknowledged\"\r
+
+        \r
+
+        tos_mar2018\r
+
+        ------WebKitFormBoundaryHodrknGBwV6OnjdZ\r
+
+        Content-Disposition: form-data; name=\"login\"\r
+
+        \r
+
+        true\r
+
+        ------WebKitFormBoundaryHodrknGBwV6OnjdZ--\r\n"
+      mimeType: multipart/form-data; boundary=----WebKitFormBoundaryHodrknGBwV6OnjdZ
+    headers:
+      - accept: "*/*"
+      - accept-language: en-US,en;q=0.9
+      - content-type: multipart/form-data; boundary=----WebKitFormBoundaryHodrknGBwV6OnjdZ
+    id: 4173b411-7d8c-4b6c-b890-d264be36e8b7
+
+parameters:
+  - uuid: ${__random_uuid()}
+  - email_for_test: kadam%2b${uuid}%40test.loadmill.com
+  - base_url: https://slack.com
+  - seed: ${__random_uuid}
+  - loadmill_email_confirmation_service_url: https://app.loadmill.com
+scopeParameters: []
