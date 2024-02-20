@@ -1,0 +1,66 @@
+meta:
+  description: Kafka
+requests:
+  
+  - description: Subscribe to a topic
+    method: POST
+    url: http://localhost:3000/subscribe
+    postData:
+      text: |-
+        {
+          "brokers": ["elegant-reindeer-11010-eu2-kafka.upstash.io:9092"],
+          "topic": "first-topic",
+          "ssl": true,
+          "sasl": ${sasl_config}
+        }
+      mimeType: application/json
+    extract:
+      - id:
+          jsonPath: $["id"]
+    id: 4db66947-eac1-40a4-a2de-7bb402ee3d4c
+
+  - description: Produce data
+    method: POST
+    url: http://localhost:3000/produce
+    postData:
+      text: |-
+        {
+          "brokers": ["elegant-reindeer-11010-eu2-kafka.upstash.io:9092"],
+          "topic": "first-topic",
+          "message": ${message},
+          "ssl": true,
+          "sasl": ${sasl_config}
+        }
+      mimeType: application/json
+    extract: []
+    id: ae071194-0c04-42e2-9fc4-1eb751271f98
+
+  - description: consume data
+    method: GET
+    url: http://localhost:3000/consume/${id}?filter=.*${test_timestamp}.*
+    disabled: false
+    postData:
+      text: ""
+      mimeType: text/plain
+    extract:
+      - value_of_consumed_data:
+          jsonPath: $["messages"][0]["value"]
+    assert:
+      - check: value_of_consumed_data
+        contains: ${test_timestamp}
+    id: febf5777-0940-4f00-b570-ebdbd79e70f5
+
+parameters:
+  - test_timestamp: ${__now_iso()}
+  - message: >-
+      {
+        "value": "The value includes the current timestamp (so we can filter this message by it) -> ${test_timestamp}",
+        "key": "${__launchedBy}"
+      }
+  - sasl_config: >-
+      {
+          "mechanism": "SCRAM-SHA-512",
+          "username": "ZWxlZ2FudC1yZWluZGVlci0xMTAxMCRyUPjTRycpdZjzoiw3XRWgBlBlmyuJY0A",
+          "password": "MGRkZjg3YmMtOTIxYy00Y2JhLTkyMjctZTQ2YmQ5MDE5NDc4"
+      }
+scopeParameters: []

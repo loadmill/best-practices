@@ -1,0 +1,38 @@
+meta:
+  description: Postgres - books and authors
+requests:
+  
+  - description: Find a fantasy book by genre
+    method: POST
+    url: https://db-relay-service.loadmill.com/api/postgres
+    postData:
+      text: >-
+        {
+          "connectionString": "postgres://excvlgbu:F5yRPki7eHNs8M7EvdyirjlXADunkXLd@bubble.db.elephantsql.com:5432/excvlgbu",
+          "query": "select * from books where genre='${genre}'"
+        }
+      mimeType: application/json
+    extract:
+      - book_id:
+          jsonPath: $["result"][0]["book_id"]
+    id: f912062b-c2ca-49f1-b69d-2d39152fbddd
+
+  - description: Find the author
+    method: POST
+    url: https://db-relay-service.loadmill.com/api/postgres
+    disabled: false
+    postData:
+      text: >-
+        {
+          "connectionString": "postgres://excvlgbu:F5yRPki7eHNs8M7EvdyirjlXADunkXLd@bubble.db.elephantsql.com:5432/excvlgbu",
+          "query": "select * from author_book where book_id=${book_id}"
+        }
+      mimeType: application/json
+    extract:
+      - author_id:
+          jsonPath: $["result"][0]["author_id"]
+    id: 955313e7-7bb3-4637-b481-8abd6c89ee4b
+
+parameters:
+  - genre: Fantasy
+scopeParameters: []

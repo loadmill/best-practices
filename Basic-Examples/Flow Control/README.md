@@ -1,4 +1,4 @@
-# Flow control - Notes
+# Notes
 ## First request 'Loop until condition is true'
 - The parameter `number_for_fc_example` is initialized as 0 in the global parameters section. Thus, every change of this param affects its value in all other requests as it's a flow scope parameter.
 - Once a condition is set in the Flow Control panel, at the end of every request (after the postscript and after the extractions), the condition will be checked and as long as the condition is not true OR the number of iterations hasn't reached the `max iter.`, it'll keep going.

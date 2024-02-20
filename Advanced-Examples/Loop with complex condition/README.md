@@ -1,5 +1,5 @@
-# Notes
-The flow demonstrates a workaround for a `for` loop in Loadmill's editor.
+# How to Implement a Complex-Condition Loop with Loadmill
+The flow demonstrates a workaround for a `for` loop in Loadmill's editor, with a complex-condition.
 ## 1st request
 ### Fetching the countries array + initializing parameters
 #### TLDR

@@ -1,5 +1,5 @@
-## Notes about testing with CSV
-- When using CSV, it will affect only the execution of the whole suite, but not the single flow when it is executed from loadmill's editor.
+# Notes
+When using CSV, it will affect only the execution of the whole suite, but not the single flow when it is executed from loadmill's editor.
 > i.e running the flow in 'try now' (from the editor) using a CSV, will take only one random line's parameters.
 
 ### How to import and run a test with a CSV:

@@ -1,2 +1,2 @@
-## Notes
-- The extraction of a parameter in Websocket is made by a regex expression whose **group** output is the extracted value. e.g `foo (.*) bar` will extract whatever is between 'foo' and 'bar'. In contrast to `foo .* bar` which is usually used to output true/false, thus, will have nothing to return as an output.
+# Notes
+The extraction of a parameter in Websocket is made by a regex expression whose **group** output is the extracted value. e.g `foo (.*) bar` will extract whatever is between 'foo' and 'bar'. In contrast to `foo .* bar` which is usually used to output true/false, thus, will have nothing to return as an output.

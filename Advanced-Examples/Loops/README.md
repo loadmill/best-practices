@@ -1,4 +1,4 @@
-# Notes
+# How to Implement a Loop with Loadmill
 The flow demonstrates a workaround for a `for` loop in Loadmill's editor.
 ## 1st request
 ### Fetching the countries array + initializing parameters

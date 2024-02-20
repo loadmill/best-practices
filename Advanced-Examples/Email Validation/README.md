@@ -1,4 +1,4 @@
-# How to work with Loadmill's email validation service?
+# How to Work with Loadmill's Email Validation Service?
 ### A guide with a real life example on Slack.
 When we perform a signup/login flow we sometimes have to confront with a One Time Password which is sent to the email we use for the test. 
 

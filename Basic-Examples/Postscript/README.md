@@ -1,4 +1,4 @@
-## Notes
+# Notes
 ### Parameters accessability
 > Postscript variables (`var`s, `let`s and `const`s) are indeed accessible from other request in the same flow, although they are not shown under 'user parameters' after the flow is executed.
 ### Logs & Debugging
