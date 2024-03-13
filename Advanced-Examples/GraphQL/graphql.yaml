@@ -1,0 +1,29 @@
+meta:
+  description: Graphql
+requests:
+  
+  - description: Simple request
+    method: POST
+    url: https://spacex-production.up.railway.app/
+    postData:
+      text: >-
+        {
+          "query": "query ExampleQuery { company { ceo cto coo founded } roadster { apoapsis_au } }"
+        }
+      mimeType: application/json
+    headers: []
+    id: 9fc3cdac-d118-4927-a69b-149755d196da
+
+  - description: A request with variables
+    method: POST
+    url: https://spacex-production.up.railway.app/
+    postData:
+      text: '{"query":"query ExampleQuery($rocketId: ID!) { company { ceo cto coo
+        founded } roadster { mars_distance_km } rocket(id: $rocketId) { height {
+        meters } } }","variables":{"rocketId":"5e9d0d95eda69955f709d1eb"}}'
+      mimeType: application/json
+    headers: []
+    id: e46b72ab-8960-4b10-945a-7d79546de115
+
+parameters: []
+scopeParameters: []
