@@ -1,0 +1,80 @@
+meta:
+  description: Webhook
+requests:
+  
+  - description: Sending a webhook
+    method: DELETE
+    url: https://wh.loadmill.com/${uuid}/route/for/the/webhook/url_arg1/?query_arg=example
+    postData:
+      text: |-
+        {
+          "title": "Trigger another service",
+          "arguments": {
+            "arg1": "1st webhook arg",
+            "arg2": "2nd webhook arg"
+          }
+        }
+      mimeType: application/json
+    headers:
+      - my_webhook_header: '"A header can be added as well"'
+    id: 4515c16f-d1b5-4aa0-8f15-a5406c21794b
+
+  - description: Checking the webhook validity
+    method: GET
+    url: https://wh.loadmill.com/requests/${uuid}
+    extract:
+      - webhook_body:
+          jsonPath: $["body"]
+      - webhook_path:
+          jsonPath: $["path"]
+      - url_query:
+          jsonPath: $["query"]
+    assert:
+      - check: webhook_body
+        JSONContains: |-
+          {
+            "arguments": {
+              "arg1": "1st webhook arg"
+            }
+          }
+      - check: webhook_path
+        contains: /route/for/the/webhook/
+      - check: url_query
+        contains: example
+    id: e387b219-0d18-4c4d-bccd-8465bc776cd9
+
+  - description: Sending webhook 1 (POST)
+    method: POST
+    url: https://wh.loadmill.com/${uuid}/route/to/trigger
+    id: aae7e715-51cc-44ec-a937-0c027dc024de
+
+  - description: Sending webhook 2 (different route)
+    method: GET
+    url: https://wh.loadmill.com/${uuid}/specific/route
+    id: 07bfd8d9-4786-4ca0-b268-03e6f5bf0b9f
+
+  - description: Sending webhook 3 (header)
+    method: GET
+    url: https://wh.loadmill.com/${uuid}/route/to/trigger
+    headers:
+      - header_to_search: "True"
+    id: 18ba9a47-636f-494f-8067-77a45aee6724
+
+  - description: Filtering webhook 2 (by route)
+    method: GET
+    url: https://wh.loadmill.com/requests/${uuid}?path=/specific/route
+    id: f8113460-0285-4702-a3dd-c6ee0c2b1a28
+
+  - description: Filtering webhook 3 (by header)
+    method: GET
+    url: https://wh.loadmill.com/requests/${uuid}?headers.header_to_search=True
+    id: e28f10e1-bbf4-4286-8680-ac13c3b0e90e
+
+  - description: Filtering webhook 1 (by method)
+    method: GET
+    url: https://wh.loadmill.com/requests/${uuid}?method=POST
+    id: abe0a1fd-7188-46bf-8c31-44b5b08d4a79
+
+parameters:
+  - uuid: ${__random_uuid()}
+scopeParameters: []
